@@ -121,7 +121,7 @@ public class Main extends Application {
                     }else {
                         changed = false;
                     }
-                    if(changed) {
+                    if(changed && ForeWindTitle.length() != 0) {
                         int brightnessVal = BrightnessManager.computeBrightness();
                         if (brightnessVal < 100 && brightnessVal > 80) {
                             BrightnessManager.setBrightness(60);

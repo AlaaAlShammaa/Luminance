@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="luminance">
+    <output-path>$PROJECT_DIR$/out/artifacts/luminance</output-path>
+    <root id="archive" name="luminance.jar">
+      <element id="module-output" name="luminance" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/jna-platform-4.2.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/Downloads/jna-4.2.2.jar" path-in-jar="/" />
+      <element id="file-copy" path="$USER_HOME$/Downloads/jna-4.2.2.jar" />
+      <element id="file-copy" path="$USER_HOME$/Downloads/jna-platform-4.2.2.jar" />
+    </root>
+  </artifact>
+</component>

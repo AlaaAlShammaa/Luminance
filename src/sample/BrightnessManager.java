@@ -1,5 +1,8 @@
 package sample;
 
+import com.profesorfalken.jpowershell.PowerShell;
+import com.profesorfalken.jpowershell.PowerShellResponse;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -16,6 +19,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 
 
 public class BrightnessManager {
@@ -67,5 +71,15 @@ public class BrightnessManager {
         green /= countLoop;
         blue /= countLoop;
         return (int) Math.sqrt((red * red * .241) + (green * green * .691) + (blue * blue * .068));
+    }
+
+    public static int getCurrentBrightness() throws IOException {
+        String command = "powershell.exe Get-Ciminstance -Namespace root/WMI -ClassName WmiMonitorBrightness | select CurrentBrightness";
+        Process powerShellProcess = Runtime.getRuntime().exec(command);
+        StringBuilder sb = new StringBuilder();
+        Scanner scanner = new Scanner(powerShellProcess.getInputStream());
+        while (scanner.hasNext())
+            sb.append(scanner.next());
+        return Integer.parseInt(sb.toString().replaceAll("[\\D]", ""));
     }
 }

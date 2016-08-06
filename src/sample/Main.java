@@ -104,6 +104,7 @@ public class Main extends Application {
         String ForeWindTitle;
         boolean changed = false;
         char[] buffer = new char[MAX_TITLE_LENGTH * 2];
+        int brightnessLevel = 0;
 
         MainThread(String threadName) {
             this.threadName = threadName;
@@ -127,20 +128,70 @@ public class Main extends Application {
                     } else {
                         changed = false;
                     }
-                    if (changed && ForeWindTitle.length() != 0) {
+                    if (changed && ForeWindTitle.length() != 0 && !ForeWindTitle.contains("Task Switching")) {
                         int brightnessVal = BrightnessManager.computeBrightness();
+                        brightnessLevel = BrightnessManager.getCurrentBrightness();
+                        System.out.println("Title: " + ForeWindTitle + " Brightness Level " + brightnessLevel + "\t" + " Brightness Value " + brightnessVal);
                         if (brightnessVal < 100 && brightnessVal > 80) {
-                            BrightnessManager.setBrightness(60);
+                            if (brightnessLevel <= 20) {
+                                while (brightnessLevel != 60) {
+                                    brightnessLevel += 10;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            } else if (brightnessLevel > 90) {
+                                BrightnessManager.setBrightness(80);
+                                BrightnessManager.setBrightness(60);
+                            }
                         } else if (brightnessVal < 80 && brightnessVal > 60) {
-                            BrightnessManager.setBrightness(80);
+                            if (brightnessLevel <= 50) {
+                                while (brightnessLevel != 80) {
+                                    brightnessLevel += 10;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            } else {
+                                BrightnessManager.setBrightness(80);
+                            }
                         } else if (brightnessVal < 60) {
-                            BrightnessManager.setBrightness(100);
+                            if (brightnessLevel <= 70) {
+                                while (brightnessLevel != 100) {
+                                    brightnessLevel += 10;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            } else {
+                                BrightnessManager.setBrightness(100);
+                            }
                         } else if (brightnessVal > 100 && brightnessVal < 150) {
-                            BrightnessManager.setBrightness(40);
+                            if (brightnessLevel > 70) {
+                                while (brightnessLevel != 40) {
+                                    brightnessLevel -= 10;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            } else if (brightnessLevel <= 10) {
+                                BrightnessManager.setBrightness(20);
+                                BrightnessManager.setBrightness(40);
+                            } else {
+                                BrightnessManager.setBrightness(40);
+                            }
+
                         } else if (brightnessVal > 150 && brightnessVal < 200) {
-                            BrightnessManager.setBrightness(20);
+                            if (brightnessLevel > 40) {
+                                while (brightnessLevel != 20) {
+                                    brightnessLevel -= 10;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            } else {
+                                BrightnessManager.setBrightness(20);
+                            }
                         } else {
-                            BrightnessManager.setBrightness(0);
+                            if (brightnessLevel >= 30) {
+                                while (brightnessLevel != 0) {
+                                    brightnessLevel -= 10;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            }
+                            else{
+                                BrightnessManager.setBrightness(0);
+                            }
                         }
                     }
                     Thread.sleep(600);

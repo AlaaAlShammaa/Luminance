@@ -23,7 +23,7 @@ public class BrightnessManager {
             throws IOException {
         //Creates a powerShell command that will set the brightness to the requested value (0-100), after the requested delay (in milliseconds) has passed.
         String s = String.format("$brightness = %d;", brightness)
-                + "$delay = 800;"
+                + "$delay = 200;"
                 + "$myMonitor = Get-WmiObject -Namespace root\\wmi -Class WmiMonitorBrightnessMethods;"
                 + "$myMonitor.wmisetbrightness($delay, $brightness)";
         String command = "powershell.exe  " + s;

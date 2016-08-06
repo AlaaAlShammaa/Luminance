@@ -1,6 +1,8 @@
 package sample;
+
 import java.awt.*;
 import java.io.IOException;
+
 import com.sun.jna.Native;
 import com.sun.jna.platform.win32.WinDef.HWND;
 import com.sun.jna.ptr.PointerByReference;
@@ -24,13 +26,15 @@ import java.net.URL;
 
 import static sample.Main.User32DLL.GetForegroundWindow;
 import static sample.Main.User32DLL.GetWindowTextW;
+
 public class Main extends Application {
     private Stage stage;
     MainThread mainThread;
+    public static int brightnessLevel = 0;
     public static boolean running = true;
     public static boolean noExit = true;
-    public static final String imageLoc = "http://i65.tinypic.com/161jb7l.png";
     private static final int MAX_TITLE_LENGTH = 1024;
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         this.stage = primaryStage;
@@ -54,12 +58,13 @@ public class Main extends Application {
                 Platform.exit();
             }
             java.awt.SystemTray tray = java.awt.SystemTray.getSystemTray();
-            URL imageurl = new URL(imageLoc);
-            java.awt.Image image = ImageIO.read(imageurl);
+            URL imagePath = Main.class.getResource("icon.png");
+            File f = new File(imagePath.getFile());
+            java.awt.Image image = ImageIO.read(f);
             java.awt.TrayIcon trayIcon = new java.awt.TrayIcon(image);
             java.awt.MenuItem stopItem = new java.awt.MenuItem("Stop");
             // stop the execution of the thread
-            stopItem.addActionListener(event ->{
+            stopItem.addActionListener(event -> {
                 if (stopItem.getLabel().equals("Stop")) {
                     stopItem.setLabel("Resume");
                     running = false;
@@ -67,7 +72,7 @@ public class Main extends Application {
                     stopItem.setLabel("Stop");
                     running = true;
                 }
-            } );
+            });
             java.awt.Font defaultFont = java.awt.Font.decode(null);
             java.awt.Font boldFont = defaultFont.deriveFont(java.awt.Font.BOLD);
             stopItem.setFont(boldFont);
@@ -92,6 +97,7 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
     private static class MainThread extends Thread {
         Thread t;
         String threadName;
@@ -118,23 +124,73 @@ public class Main extends Application {
                     if (!ForeWindTitle.equals(Native.toString(buffer))) {
                         changed = true;
                         ForeWindTitle = Native.toString(buffer);
-                    }else {
+                    } else {
                         changed = false;
                     }
-                    if(changed && ForeWindTitle.length() != 0) {
+                    if (changed && ForeWindTitle.length() != 0) {
                         int brightnessVal = BrightnessManager.computeBrightness();
                         if (brightnessVal < 100 && brightnessVal > 80) {
-                            BrightnessManager.setBrightness(60);
+                            if (brightnessLevel <= 20) {
+                                for (int i = brightnessLevel; i < 60; i += brightnessLevel + 20) {
+                                    brightnessLevel = brightnessLevel + 20;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            } else {
+                                BrightnessManager.setBrightness(60);
+                            }
+                            brightnessLevel = 60;
                         } else if (brightnessVal < 80 && brightnessVal > 60) {
-                            BrightnessManager.setBrightness(80);
+                            if (brightnessLevel <= 20) {
+                                for (int i = brightnessLevel; i < 80; i += brightnessLevel + 20) {
+                                    brightnessLevel = brightnessLevel + 20;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            } else {
+                                BrightnessManager.setBrightness(80);
+                            }
+                            brightnessLevel = 80;
                         } else if (brightnessVal < 60) {
-                            BrightnessManager.setBrightness(100);
+                            if (brightnessLevel <= 60) {
+                                for (int i = brightnessLevel; i < 100; i += brightnessLevel + 20) {
+                                    brightnessLevel = brightnessLevel + 20;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            } else {
+                                BrightnessManager.setBrightness(100);
+                            }
+                            brightnessLevel = 100;
                         } else if (brightnessVal > 100 && brightnessVal < 150) {
-                            BrightnessManager.setBrightness(40);
+                            if (brightnessLevel == 0) {
+                                for (int i = brightnessLevel; i < 40; i += brightnessLevel + 20) {
+                                    brightnessLevel = brightnessLevel + 20;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            } else {
+                                BrightnessManager.setBrightness(40);
+                            }
+                            brightnessLevel = 40;
                         } else if (brightnessVal > 150 && brightnessVal < 200) {
-                            BrightnessManager.setBrightness(20);
+                            if(brightnessLevel >= 60){
+                                for (int i = brightnessLevel; i < 20; i-=brightnessLevel - 20) {
+                                    brightnessLevel = brightnessLevel - 20;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            }
+                            else {
+                                BrightnessManager.setBrightness(20);
+                            }
+                            brightnessLevel = 20;
                         } else {
-                            BrightnessManager.setBrightness(0);
+                            if(brightnessLevel >= 40){
+                                for (int i = brightnessLevel; i < 20; i-=brightnessLevel - 20) {
+                                    brightnessLevel = brightnessLevel - 20;
+                                    BrightnessManager.setBrightness(brightnessLevel);
+                                }
+                            }
+                            else {
+                                BrightnessManager.setBrightness(0);
+                            }
+                            brightnessLevel = 0;
                         }
                     }
                     Thread.sleep(60);
@@ -156,10 +212,16 @@ public class Main extends Application {
 
 
     }
+
     static class User32DLL {
-        static { Native.register("user32"); }
+        static {
+            Native.register("user32");
+        }
+
         public static native int GetWindowThreadProcessId(HWND hWnd, PointerByReference pref);
+
         public static native HWND GetForegroundWindow();
+
         public static native int GetWindowTextW(HWND hWnd, char[] lpString, int nMaxCount);
     }
 }

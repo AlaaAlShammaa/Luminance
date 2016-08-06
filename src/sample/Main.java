@@ -59,8 +59,8 @@ public class Main extends Application {
             }
             java.awt.SystemTray tray = java.awt.SystemTray.getSystemTray();
             URL imagePath = Main.class.getResource("icon.png");
-            File f = new File(imagePath.getFile());
-            java.awt.Image image = ImageIO.read(f);
+            //File f = new File(imagePath.getFile());
+            java.awt.Image image = ImageIO.read(imagePath);
             java.awt.TrayIcon trayIcon = new java.awt.TrayIcon(image);
             java.awt.MenuItem stopItem = new java.awt.MenuItem("Stop");
             // stop the execution of the thread
@@ -130,70 +130,20 @@ public class Main extends Application {
                     if (changed && ForeWindTitle.length() != 0) {
                         int brightnessVal = BrightnessManager.computeBrightness();
                         if (brightnessVal < 100 && brightnessVal > 80) {
-                            if (brightnessLevel <= 20) {
-                                for (int i = brightnessLevel; i < 60; i += brightnessLevel + 20) {
-                                    brightnessLevel = brightnessLevel + 20;
-                                    BrightnessManager.setBrightness(brightnessLevel);
-                                }
-                            } else {
-                                BrightnessManager.setBrightness(60);
-                            }
-                            brightnessLevel = 60;
+                            BrightnessManager.setBrightness(60);
                         } else if (brightnessVal < 80 && brightnessVal > 60) {
-                            if (brightnessLevel <= 20) {
-                                for (int i = brightnessLevel; i < 80; i += brightnessLevel + 20) {
-                                    brightnessLevel = brightnessLevel + 20;
-                                    BrightnessManager.setBrightness(brightnessLevel);
-                                }
-                            } else {
-                                BrightnessManager.setBrightness(80);
-                            }
-                            brightnessLevel = 80;
+                            BrightnessManager.setBrightness(80);
                         } else if (brightnessVal < 60) {
-                            if (brightnessLevel <= 60) {
-                                for (int i = brightnessLevel; i < 100; i += brightnessLevel + 20) {
-                                    brightnessLevel = brightnessLevel + 20;
-                                    BrightnessManager.setBrightness(brightnessLevel);
-                                }
-                            } else {
-                                BrightnessManager.setBrightness(100);
-                            }
-                            brightnessLevel = 100;
+                            BrightnessManager.setBrightness(100);
                         } else if (brightnessVal > 100 && brightnessVal < 150) {
-                            if (brightnessLevel == 0) {
-                                for (int i = brightnessLevel; i < 40; i += brightnessLevel + 20) {
-                                    brightnessLevel = brightnessLevel + 20;
-                                    BrightnessManager.setBrightness(brightnessLevel);
-                                }
-                            } else {
-                                BrightnessManager.setBrightness(40);
-                            }
-                            brightnessLevel = 40;
+                            BrightnessManager.setBrightness(40);
                         } else if (brightnessVal > 150 && brightnessVal < 200) {
-                            if(brightnessLevel >= 60){
-                                for (int i = brightnessLevel; i < 20; i-=brightnessLevel - 20) {
-                                    brightnessLevel = brightnessLevel - 20;
-                                    BrightnessManager.setBrightness(brightnessLevel);
-                                }
-                            }
-                            else {
-                                BrightnessManager.setBrightness(20);
-                            }
-                            brightnessLevel = 20;
+                            BrightnessManager.setBrightness(20);
                         } else {
-                            if(brightnessLevel >= 40){
-                                for (int i = brightnessLevel; i < 20; i-=brightnessLevel - 20) {
-                                    brightnessLevel = brightnessLevel - 20;
-                                    BrightnessManager.setBrightness(brightnessLevel);
-                                }
-                            }
-                            else {
-                                BrightnessManager.setBrightness(0);
-                            }
-                            brightnessLevel = 0;
+                            BrightnessManager.setBrightness(0);
                         }
                     }
-                    Thread.sleep(60);
+                    Thread.sleep(600);
                 } catch (AWTException | IOException | InterruptedException e) {
                     e.printStackTrace();
                 }

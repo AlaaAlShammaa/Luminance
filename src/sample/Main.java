@@ -30,7 +30,6 @@ import static sample.Main.User32DLL.GetWindowTextW;
 public class Main extends Application {
     private Stage stage;
     MainThread mainThread;
-    public static int brightnessLevel = 0;
     public static boolean running = true;
     public static boolean noExit = true;
     private static final int MAX_TITLE_LENGTH = 1024;
@@ -130,7 +129,7 @@ public class Main extends Application {
                     }
                     if (changed && ForeWindTitle.length() != 0 && !ForeWindTitle.contains("Task Switching")) {
                         int brightnessVal = BrightnessManager.computeBrightness();
-                        brightnessLevel = BrightnessManager.getCurrentBrightness();
+                        brightnessLevel = Math.round(BrightnessManager.getCurrentBrightness() / 10) * 10;
                         if (brightnessVal < 100 && brightnessVal > 80) {
                             if (brightnessLevel <= 20) {
                                 while (brightnessLevel != 60) {

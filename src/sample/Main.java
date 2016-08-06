@@ -131,7 +131,6 @@ public class Main extends Application {
                     if (changed && ForeWindTitle.length() != 0 && !ForeWindTitle.contains("Task Switching")) {
                         int brightnessVal = BrightnessManager.computeBrightness();
                         brightnessLevel = BrightnessManager.getCurrentBrightness();
-                        System.out.println("Title: " + ForeWindTitle + " Brightness Level " + brightnessLevel + "\t" + " Brightness Value " + brightnessVal);
                         if (brightnessVal < 100 && brightnessVal > 80) {
                             if (brightnessLevel <= 20) {
                                 while (brightnessLevel != 60) {
